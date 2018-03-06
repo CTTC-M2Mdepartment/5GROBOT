@@ -385,45 +385,6 @@ def readLine():
 		
 	return last_value
 
-class LineTrackerThread_ori(threading.Thread):
-
-        def __init__(self):
-                threading.Thread.__init__(self)
-                self._running = True
-
-        def terminate(self):
-                self._running = False
-
-        def run(self):
-                print 'line thread start!!!'
-                maximum = 40
-                integral = 0
-                last_proportional = 0
-                calibrate()
-                while self._running:
-                        time.sleep(0.002)
-                        position = readLine()
-
-                        proportional = position - 2000
-                        derivative = proportional - last_proportional
-                        integral += proportional
-                        last_proportional = proportional
-
-                        power_difference = proportional/25 + derivative/100
-
-                        if (power_difference > maximum):
-                                power_difference = maximum
-                        if (power_difference < - maximum):
-                                power_difference = - maximum
-
-                        if (power_difference < 0):
-                                PWMB.ChangeDutyCycle(maximum + power_difference)
-                                PWMA.ChangeDutyCycle(maximum)
-                        else:
-                                PWMB.ChangeDutyCycle(maximum)
-                                PWMA.ChangeDutyCycle(maximum - power_difference)
-                print 'line thread stop!!!'
-                return
 
 class LineTrackerThread(threading.Thread):
 
