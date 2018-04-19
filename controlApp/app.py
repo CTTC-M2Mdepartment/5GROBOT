@@ -17,7 +17,7 @@ robot_url = {
 	'robot3': 'http://172.24.1.7:8080/restconf/config/robotApp/',
 	'robot4': 'http://172.24.1.8:8080/restconf/config/robotApp/',
 	'robot5': 'http://172.24.1.9:8080/restconf/config/robotApp/'
-}
+}       
 
 def sendCommand():
 	msg = {
@@ -36,7 +36,17 @@ def sendCommand():
 		print('Connection to Robot Failed.')
 	else:
 		print('Command Send Successfully.')
-	
+
+@app.route('/log')
+def log():
+	msg = {
+		"robotId": robot,
+		"command": command,
+		"speed": speed,
+		"angle": angle,
+		"TrackStatus": track
+	}
+	return json.dumps(msg)
 
 @app.route('/')
 def index():
@@ -48,6 +58,7 @@ def forward():
 	global command
 	command = 'FORWARD'
 	sendCommand()
+	log()
 	return redirect(url_for('index'))
 
 @app.route('/left')
@@ -55,6 +66,7 @@ def left():
 	global command
 	command = 'LEFT'
 	sendCommand()
+	log()
 	return redirect(url_for('index'))
 
 @app.route('/stop')
@@ -69,6 +81,7 @@ def right():
 	global command
 	command = 'RIGHT'
 	sendCommand()
+	log()
 	return redirect(url_for('index'))
 
 @app.route('/backward')
@@ -76,6 +89,7 @@ def backward():
 	global command
 	command = 'BACKWARD'
 	sendCommand()
+	log()
 	return redirect(url_for('index'))
 
 @app.route('/speedplus')
